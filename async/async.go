@@ -52,11 +52,15 @@ func RunAllAsync(asyncFuncs []AsyncFunc, opts ...Option) ([]interface{}, []error
 		wg.Add(1)
 		go func(i int, asyncFunc AsyncFunc) {
 			defer wg.Done()
+			result, err := asyncFunc()
 			select {
 			case <-ctx.Done():
-				errors[i] = ctx.Err()
+				if err == nil { // Only set timeout error if no other error has occurred
+					errors[i] = fmt.Errorf("operation timed out")
+				} else {
+					errors[i] = err // Preserve original error if occurred
+				}
 			default:
-				result, err := asyncFunc()
 				results[i] = result
 				errors[i] = err
 			}
