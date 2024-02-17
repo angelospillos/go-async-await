@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/angelospillos/goasync/async"
 	"fmt"
+	"github.com/angelospillos/goasync/async"
 	"time"
 )
 

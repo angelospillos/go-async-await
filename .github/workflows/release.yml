@@ -1,0 +1,42 @@
+name: Go Module Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '^1.17' # Use the Go version that matches your project requirements
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v3
+      
+      - name: Get dependencies
+        run: go mod tidy
+
+      - name: Build
+        run: go build -v ./...
+
+      - name: Test
+        run: go test -v ./...
+
+  create_release:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false

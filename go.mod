@@ -1,3 +1,3 @@
-module github.com/angelospillos/goasync/async
+module github.com/angelospillos/goasync
 
-go 1.18
+go 1.21.3
