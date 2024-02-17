@@ -1,3 +1,3 @@
-https://github.com/angelospillos/go-async-await
+module github.com/angelospillos/goasync/async
 
 go 1.18
